@@ -55,12 +55,14 @@ class CanonicalSystem():
     def rollout(self, **kwargs):
         """Generate x for open loop movements.
         """
+        # Scaling timesteps if tau scaling factor is provided
         if 'tau' in kwargs:
             timesteps = int(self.timesteps / kwargs['tau'])
         else:
             timesteps = self.timesteps
         self.x_track = np.zeros(timesteps)
 
+        # Reset internal state and run the CS
         self.reset_state()
         for t in range(timesteps):
             self.x_track[t] = self.x
@@ -79,7 +81,8 @@ class CanonicalSystem():
 
         tau float: gain on execution time
                    increase tau to make the system execute faster
-        error_coupling float: slow down if the error is > 1
+        error_coupling float: slow down if the error is > 1, is the 
+        parameter which makes the DMP 'wait for the trajectory' if running too fast
         """
         self.x += (-self.ax * self.x * error_coupling) * tau * self.dt
         return self.x

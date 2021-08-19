@@ -1,0 +1,6 @@
+devel_space: /home/francesco-grella/Desktop/dmp_ws/src/ros_dmp/devel
+install: false
+install_space: /home/francesco-grella/Desktop/dmp_ws/src/ros_dmp/install
+profile: default
+source_space: /home/francesco-grella/Desktop/dmp_ws/src/ros_dmp/src
+workspace: /home/francesco-grella/Desktop/dmp_ws/src/ros_dmp

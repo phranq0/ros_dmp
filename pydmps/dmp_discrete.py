@@ -108,6 +108,7 @@ class DMPs_discrete(DMPs):
         for d in range(self.n_dmps):
             # spatial scaling term
             k = (self.goal[d] - self.y0[d])
+            # Even here it actually just implements the equation in the paper
             for b in range(self.n_bfs):
                 numer = np.sum(x_track * psi_track[:, b] * f_target[:, d])
                 denom = np.sum(x_track**2 * psi_track[:, b])
@@ -122,6 +123,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # test normal run
+    # NB this is only the free system, without path imitation
     dmp = DMPs_discrete(dt=.05, n_dmps=1, n_bfs=10, w=np.zeros((1, 10)))
     y_track, dy_track, ddy_track = dmp.rollout()
 
@@ -139,8 +141,8 @@ if __name__ == "__main__":
     n_bfs = [10, 30, 50, 100, 10000]
 
     # a straight line to target
-    path1 = np.sin(np.arange(0, 1, .01)*5)
-    # a strange path to target
+    path1 = np.sin(np.arange(0, 5, .01)*5)
+    # a strange path to target (i.e. a step)
     path2 = np.zeros(path1.shape)
     path2[int(len(path2) / 2.):] = .5
     

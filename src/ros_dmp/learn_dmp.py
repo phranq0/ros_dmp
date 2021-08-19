@@ -86,7 +86,7 @@ class LearnDmp:
                 'yaw': np.asarray(weights[5, :]).tolist()}
         file = join(self.weights_file_path, file_name)
         try:
-            with open(file, "a+") as f:
+            with open(file, "w+") as f:
                 yaml.dump(data, f)
             self.result = "success"
         except:

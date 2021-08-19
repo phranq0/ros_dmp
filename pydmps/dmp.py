@@ -88,6 +88,7 @@ class DMPs(object):
     def gen_weights(self, f_target):
         raise NotImplementedError()
 
+    # -------------------------------------------- LEARNING STEP, very important
     def imitate_path(self, y_des):
         """Takes in a desired trajectory and generates the set of
         system parameters that best realize this path.
@@ -106,6 +107,8 @@ class DMPs(object):
         self.check_offset()
 
         # generate function to interpolate the desired trajectory
+        # the learning must be performed on a smooth function, 
+        # the raw provided trajectories are discontinuous
         import scipy.interpolate
         path = np.zeros((self.n_dmps, self.timesteps))
         x = np.linspace(0, self.cs.run_time, y_des.shape[1])
@@ -113,6 +116,8 @@ class DMPs(object):
             path_gen = scipy.interpolate.interp1d(x, y_des[d])
             for t in range(self.timesteps):
                 path[d, t] = path_gen(t * self.dt)
+        # NB The interpolated trajectory becomes the real training
+        # dataset
         y_des = path
 
         # calculate velocity of y_des
@@ -127,6 +132,7 @@ class DMPs(object):
 
         f_target = np.zeros((y_des.shape[1], self.n_dmps))
         # find the force required to move along this trajectory
+        # this is simply the main equation described in the paper
         for d in range(self.n_dmps):
             f_target[:, d] = (ddy_des[d] - self.ay[d] *
                               (self.by[d] * (self.goal[d] - y_des[d]) -
@@ -137,6 +143,8 @@ class DMPs(object):
 
         self.reset_state()
         return self.w
+
+    # -------------------------------------------------------------------------------------
 
 
     def rollout(self, timesteps=None, goal=None, y0=None, **kwargs):

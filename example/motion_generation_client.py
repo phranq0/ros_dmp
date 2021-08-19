@@ -10,8 +10,9 @@ if __name__ == "__main__":
     req = GenerateMotionRequest()
 
     # Compose request message
-    req.dmp_name = "dmp/weights/example.yaml"
-    req.tau = 1.0
+    # NB Goal is fixed here, TODO Read values from a .json both from here and from the learn client
+    req.dmp_name = "/home/francesco-grella/Desktop/dmp_ws/dmp/weights/example.yaml"
+    req.tau = 0.01
     req.dt = 0.01
     req.goal_pose = PoseStamped()
     req.goal_pose.header.frame_id = "base_link"

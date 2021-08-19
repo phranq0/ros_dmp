@@ -4,12 +4,20 @@ import rospy
 from geometry_msgs.msg import Pose
 from ros_dmp.srv import *
 
+# This script takes an input trajectory and calls a ROS
+# service to train a DMP on it
+# TODO Test it with csv data
+# The smooth interpolation should be done by the library, but I
+# can also do it manually using Scipy
+
 if __name__ == "__main__":
 
     rospy.init_node('learn_dmp_service_test_client')
+
+    # Initialize request, just like a ROS message
     req = LearnDMPRequest()
 
-    # Generating a hypothetical trajectory
+    # Generating a hypothetical trajectory, 
     x = np.linspace(0, 5)
     y = np.linspace(0, 5)
     z = np.zeros(10)
@@ -40,6 +48,7 @@ if __name__ == "__main__":
         req.poses.append(pose)
 
     # Call the service
+    # This publishes on its topics the full trajectories 
     try:
         service_client = rospy.ServiceProxy('/learn_dynamic_motion_primitive_service', LearnDMP)
         rospy.loginfo(service_client(req))
